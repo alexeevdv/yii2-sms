@@ -8,24 +8,29 @@ use yii\helpers\ArrayHelper;
 use yii\httpclient\Client as HttpClient;
 
 /**
- * Class SmsRu
+ * Class SmscRu
  * @package alexeevdv\sms\provider
  */
-class SmsRu extends BaseProvider
+class SmscRu extends BaseProvider
 {
-    const STATUS_QUEUED = 100;
+    const FORMAT_JSON = 3;
 
     /**
      * @var string
      */
-    public $api_id;
+    public $login;
+
+    /**
+     * @var string
+     */
+    public $psw;
 
     /**
      * @var array
      */
     public $httpClientConfig = [
         'class' => HttpClient::class,
-        'baseUrl' => 'https://sms.ru/sms',
+        'baseUrl' => 'https://smsc.ru/sys',
         'responseConfig' => [
             'format' => HttpClient::FORMAT_JSON
         ],
@@ -37,8 +42,11 @@ class SmsRu extends BaseProvider
      */
     public function init()
     {
-        if ($this->api_id === null) {
-            throw new InvalidConfigException('`api_id` is required');
+        if ($this->login === null) {
+            throw new InvalidConfigException('`login` is required');
+        }
+        if ($this->psw === null) {
+            throw new InvalidConfigException('`psw` is required');
         }
         parent::init();
     }
@@ -49,10 +57,10 @@ class SmsRu extends BaseProvider
     public function send($number, $text)
     {
         $response = $this->apiCall('send', [
-            'to' => $number,
-            'msg' => $text,
+            'phones' => $number,
+            'mes' => $text,
         ]);
-        return ArrayHelper::getValue($response, 'status_code') === static::STATUS_QUEUED;
+        return ArrayHelper::getValue($response, 'id', null) !== null;
     }
 
     /**
@@ -67,8 +75,9 @@ class SmsRu extends BaseProvider
 
         // Require json response
         $params = ArrayHelper::merge($params, [
-            'json' => 1,
-            'api_id' => $this->api_id,
+            'fmt' => static::FORMAT_JSON,
+            'login' => $this->login,
+            'psw' => $this->psw,
         ]);
 
         $response = $client->get($method, $params)->send();

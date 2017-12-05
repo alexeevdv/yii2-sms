@@ -20,3 +20,33 @@ or add
 ```
 
 to the require section of your composer.json.
+
+
+Configuration
+--------------
+```
+use alexeevdv\sms\provider\SmsRu;
+use alexeevdv\sms\Sms;
+
+//...
+   'components' => [
+       'sms' => [
+           'class' => Sms::class,
+           'provider' => [
+               'class' => SmsRu::class,
+               'api_id' => '123456789',
+           ],
+       ],
+   ],
+//...
+
+```
+
+Usage
+---------------
+
+```
+
+$result = Yii::$app->sms->send('1234567890', 'Hi there!');
+
+```
