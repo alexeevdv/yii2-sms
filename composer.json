@@ -1,0 +1,30 @@
+{
+    "name": "alexeevdv/yii2-sms",
+    "description": "This extension allows SMS sending via different SMS providers",
+    "type": "yii2-extension",
+    "require": {
+        "yiisoft/yii2": "~2.0.13",
+        "yiisoft/yii2-httpclient": "^2.0"
+    },
+    "require-dev": {
+        "yiisoft/yii2-coding-standards": "^2.0"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dmitry Alekseev",
+            "email": "mail@alexeevdv.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "alexeevdv\\sms\\": "src"
+        }
+    }
+}
