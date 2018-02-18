@@ -59,13 +59,13 @@ $result = Yii::$app->sms->send('1234567890', 'Hi there!');
 Supported providers:
 --------------------
 
-* [http://sms.ru/](sms.ru)
+* [sms.ru](http://sms.ru/)
 
   Class: \alexeevdv\sms\provider\SmsRuProvider
   Params:
   * `api_id` - Your api ID from sms.ru
 
-* [http://smsc.ru/](smsc.ru)
+* [smsc.ru](http://smsc.ru/)
   
   Class: \alexeevdv\sms\provider\SmscRuProvider
   Params:
