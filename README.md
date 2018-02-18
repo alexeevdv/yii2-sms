@@ -2,8 +2,8 @@
 This extension allows SMS sending via different SMS providers
 
 
-Installation
-------------
+Installation:
+-------------
 
 The preferred way to install this extension is through [composer](https://getcomposer.org/download/).
 
@@ -22,10 +22,10 @@ or add
 to the require section of your composer.json.
 
 
-Configuration
+Configuration:
 --------------
 ```
-use alexeevdv\sms\provider\SmsRu;
+use alexeevdv\sms\provider\SmsRuProvider;
 use alexeevdv\sms\Sms;
 
 //...
@@ -33,7 +33,7 @@ use alexeevdv\sms\Sms;
        'sms' => [
            'class' => Sms::class,
            'provider' => [
-               'class' => SmsRu::class,
+               'class' => SmsRuProvider::class,
                'api_id' => '123456789',
            ],
        ],
@@ -42,11 +42,27 @@ use alexeevdv\sms\Sms;
 
 ```
 
-Usage
----------------
+Usage:
+------
 
 ```
 
 $result = Yii::$app->sms->send('1234567890', 'Hi there!');
 
 ```
+
+Supported providers:
+--------------------
+
+* [http://sms.ru/](sms.ru)
+
+  Class: \alexeevdv\sms\provider\SmsRuProvider
+  Params:
+  * `api_id` - Your api ID from sms.ru
+
+* [http://smsc.ru/](smsc.ru)
+  
+  Class: \alexeevdv\sms\provider\SmscRuProvider
+  Params:
+  * `login` - Your login from smsc.ru
+  * `psw` - Your plain text or MD5 hashed password from smsc.ru
