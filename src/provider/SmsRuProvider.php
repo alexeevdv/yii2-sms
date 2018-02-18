@@ -8,10 +8,10 @@ use yii\helpers\ArrayHelper;
 use yii\httpclient\Client as HttpClient;
 
 /**
- * Class SmsRu
+ * Class SmsRuProvider
  * @package alexeevdv\sms\provider
  */
-class SmsRu extends BaseProvider
+class SmsRuProvider extends BaseProvider
 {
     const STATUS_QUEUED = 100;
 

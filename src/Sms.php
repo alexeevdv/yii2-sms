@@ -19,6 +19,11 @@ class Sms extends Component
     public $provider;
 
     /**
+     * @var BaseProvider
+     */
+    private $_provider;
+
+    /**
      * @inheritdoc
      * @throws InvalidConfigException
      */
@@ -27,6 +32,9 @@ class Sms extends Component
         if ($this->provider === null) {
             throw new InvalidConfigException('`provider` is required.');
         }
+
+        $this->_provider = Instance::ensure($this->provider, BaseProvider::class);
+
         parent::init();
     }
 
@@ -37,8 +45,6 @@ class Sms extends Component
      */
     public function send($number, $text)
     {
-        /** @var BaseProvider $provider */
-        $provider = Instance::ensure($this->provider, BaseProvider::class);
-        return $provider->send($number, $text);
+        return $this->_provider->send($number, $text);
     }
 }

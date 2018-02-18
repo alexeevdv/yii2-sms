@@ -8,10 +8,10 @@ use yii\helpers\ArrayHelper;
 use yii\httpclient\Client as HttpClient;
 
 /**
- * Class SmscRu
+ * Class SmscRuProvider
  * @package alexeevdv\sms\provider
  */
-class SmscRu extends BaseProvider
+class SmscRuProvider extends BaseProvider
 {
     const FORMAT_JSON = 3;
 
