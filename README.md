@@ -1,5 +1,6 @@
 # yii2-sms
 ==========
+
 [![Build Status](https://travis-ci.org/alexeevdv/yii2-sms.svg?branch=master)](https://travis-ci.org/alexeevdv/yii2-sms) ![PHP 5.6](https://img.shields.io/badge/PHP-5.6-green.svg) ![PHP 7.0](https://img.shields.io/badge/PHP-7.0-green.svg) ![PHP 7.1](https://img.shields.io/badge/PHP-7.1-green.svg) ![PHP 7.2](https://img.shields.io/badge/PHP-7.2-green.svg)
 
 
