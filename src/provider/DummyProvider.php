@@ -2,11 +2,13 @@
 
 namespace alexeevdv\sms\provider;
 
+use yii\base\BaseObject;
+
 /**
  * Class DummyProvider
  * @package alexeevdv\sms\provider
  */
-class DummyProvider extends BaseProvider
+final class DummyProvider extends BaseObject implements ProviderInterface
 {
     /**
      * @inheritdoc

@@ -2,6 +2,7 @@
 
 namespace alexeevdv\sms\provider;
 
+use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
 use yii\di\Instance;
 use yii\helpers\ArrayHelper;
@@ -11,7 +12,7 @@ use yii\httpclient\Client as HttpClient;
  * Class SmscRuProvider
  * @package alexeevdv\sms\provider
  */
-class SmscRuProvider extends BaseProvider
+final class SmscRuProvider extends BaseObject implements ProviderInterface
 {
     const FORMAT_JSON = 3;
 

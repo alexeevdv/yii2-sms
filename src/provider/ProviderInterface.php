@@ -2,18 +2,16 @@
 
 namespace alexeevdv\sms\provider;
 
-use yii\base\BaseObject;
-
 /**
- * Class BaseProvider
+ * Interface ProviderInterface
  * @package alexeevdv\sms\provider
  */
-abstract class BaseProvider extends BaseObject
+interface ProviderInterface
 {
     /**
      * @param string $number
      * @param string $text
      * @return bool
      */
-    abstract public function send($number, $text);
+    public function send($number, $text);
 }

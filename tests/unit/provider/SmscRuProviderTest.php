@@ -3,40 +3,32 @@
 namespace tests\unit\provider;
 
 use alexeevdv\sms\provider\SmscRuProvider;
+use Codeception\Test\Unit;
 use yii\base\InvalidConfigException;
 
 /**
  * Class SmscRuProviderTest
  * @package tests\unit\provider
  */
-class SmscRuProviderTest extends \Codeception\Test\Unit
+final class SmscRuProviderTest extends Unit
 {
-    /**
-     * @var \tests\UnitTester
-     */
-    public $tester;
-
-    /**
-     * @test
-     */
-    public function init()
+    public function testLoginIsRequired()
     {
-        // login and psw should be required
-        $this->tester->expectException(InvalidConfigException::class, function () {
-            new SmscRuProvider;
-        });
+        $this->expectException(InvalidConfigException::class);
+        new SmscRuProvider(['psw' => 'secret']);
+    }
 
-        $this->tester->expectException(InvalidConfigException::class, function () {
-            new SmscRuProvider(['login' => 'login']);
-        });
+    public function testPasswordIsRequired()
+    {
+        $this->expectException(InvalidConfigException::class);
+        new SmscRuProvider(['login' => 'user']);
+    }
 
-        $this->tester->expectException(InvalidConfigException::class, function () {
-            new SmscRuProvider(['psw' => 'psw']);
-        });
-
+    public function testSuccessfulInstantiation()
+    {
         new SmscRuProvider([
-            'login' => 'login',
-            'psw' => 'psw'
+            'login' => 'user',
+            'psw' => 'secret',
         ]);
     }
 }

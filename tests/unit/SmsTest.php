@@ -2,52 +2,53 @@
 
 namespace tests\unit;
 
-use alexeevdv\sms\provider\DummyProvider;
+use alexeevdv\sms\provider\ProviderInterface;
 use alexeevdv\sms\Sms;
+use Codeception\Test\Unit;
 use yii\base\InvalidConfigException;
 
 /**
  * Class SmsTest
  * @package tests\unit
  */
-class SmsTest extends \Codeception\Test\Unit
+final class SmsTest extends Unit
 {
-    /**
-     * @var \tests\UnitTester
-     */
-    public $tester;
-
-    /**
-     * @test
-     */
-    public function init()
+    public function testProviderIsRequired()
     {
-        // Check that provider is required
-        $this->tester->expectException(InvalidConfigException::class, function () {
-            new Sms;
-        });
+        $this->expectException(InvalidConfigException::class);
+        new Sms();
+    }
 
-        // Check that provider is instance of BaseProvider
-        $this->tester->expectException(InvalidConfigException::class, function () {
-            new Sms([
-                'provider' => 'String',
-            ]);
-        });
+    public function testProviderIsInstanceOfProviderInterface()
+    {
+        $this->expectException(InvalidConfigException::class);
+        new Sms(['provider' => 'string']);
+    }
 
+    public function testSuccessfulInstantiation()
+    {
         new Sms([
-            'provider' => DummyProvider::class,
+            'provider' => $this->makeEmpty(ProviderInterface::class),
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function send()
+    public function testSuccessfulProviderSend()
     {
         $sms = new Sms([
-            'provider' => DummyProvider::class,
+            'provider' => $this->makeEmpty(ProviderInterface::class, [
+                'send' => true,
+            ]),
         ]);
+        $this->assertTrue($sms->send('79876543210', 'Hello world!'));
+    }
 
-        $this->tester->assertTrue($sms->send('79876543210', 'Hello world!'));
+    public function testFailedProviderSend()
+    {
+        $sms = new Sms([
+            'provider' => $this->makeEmpty(ProviderInterface::class, [
+                'send' => false,
+            ]),
+        ]);
+        $this->assertFalse($sms->send('79876543210', 'Hello world!'));
     }
 }

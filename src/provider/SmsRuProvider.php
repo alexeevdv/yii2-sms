@@ -2,6 +2,7 @@
 
 namespace alexeevdv\sms\provider;
 
+use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
 use yii\di\Instance;
 use yii\helpers\ArrayHelper;
@@ -11,7 +12,7 @@ use yii\httpclient\Client as HttpClient;
  * Class SmsRuProvider
  * @package alexeevdv\sms\provider
  */
-class SmsRuProvider extends BaseProvider
+final class SmsRuProvider extends BaseObject implements ProviderInterface
 {
     const STATUS_QUEUED = 100;
 

@@ -2,7 +2,7 @@
 
 namespace alexeevdv\sms;
 
-use alexeevdv\sms\provider\BaseProvider;
+use alexeevdv\sms\provider\ProviderInterface;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\di\Instance;
@@ -11,7 +11,7 @@ use yii\di\Instance;
  * Class Sms
  * @package alexeevdv\sms
  */
-class Sms extends Component
+final class Sms extends Component
 {
     /**
      * @var array
@@ -19,7 +19,7 @@ class Sms extends Component
     public $provider;
 
     /**
-     * @var BaseProvider
+     * @var ProviderInterface
      */
     private $_provider;
 
@@ -33,7 +33,7 @@ class Sms extends Component
             throw new InvalidConfigException('`provider` is required.');
         }
 
-        $this->_provider = Instance::ensure($this->provider, BaseProvider::class);
+        $this->_provider = Instance::ensure($this->provider, ProviderInterface::class);
 
         parent::init();
     }

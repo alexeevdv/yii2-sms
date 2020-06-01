@@ -1,3 +1,7 @@
+Under development
+-------------------------
+- [Feature] Use provider interface instead of base class (alexeevdv)
+
 1.0.1
 -------------------------
 - [Feature] Add php 7.3 and 7.4 to pipeline (alexeevdv)

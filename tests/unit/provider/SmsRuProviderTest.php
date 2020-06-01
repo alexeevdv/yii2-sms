@@ -3,31 +3,23 @@
 namespace tests\unit\provider;
 
 use alexeevdv\sms\provider\SmsRuProvider;
+use Codeception\Test\Unit;
 use yii\base\InvalidConfigException;
 
 /**
  * Class SmsRuProviderTest
  * @package tests\unit\provider
  */
-class SmsRuProviderTest extends \Codeception\Test\Unit
+final class SmsRuProviderTest extends Unit
 {
-    /**
-     * @var \tests\UnitTester
-     */
-    public $tester;
-
-    /**
-     * @test
-     */
-    public function init()
+    public function testApiIdIsRequired()
     {
-        // api_id should be required
-        $this->tester->expectException(InvalidConfigException::class, function () {
-            new SmsRuProvider;
-        });
+        $this->expectException(InvalidConfigException::class);
+        new SmsRuProvider();
+    }
 
-        new SmsRuProvider([
-            'api_id' => '1234567890',
-        ]);
+    public function testSuccessfulInstantiation()
+    {
+        new SmsRuProvider(['api_id' => 'secret']);
     }
 }
