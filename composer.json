@@ -5,7 +5,9 @@
     "require": {
         "yiisoft/yii2": "^2.0",
         "yiisoft/yii2-httpclient": "^2.0",
-        "alexeevdv/php-sms-contracts": "^0.0.1"
+        "alexeevdv/php-sms-contracts": "^0.2.0",
+        "alexeevdv/php-sms-smsru": "^0.1.0",
+        "guzzlehttp/guzzle": "^6.5"
     },
     "require-dev": {
         "yiisoft/yii2-coding-standards": "^2.0",

@@ -20,6 +20,6 @@ final class SmsRuProviderTest extends Unit
 
     public function testSuccessfulInstantiation()
     {
-        new SmsRuProvider(['api_id' => 'secret']);
+        new SmsRuProvider(['apiId' => 'secret']);
     }
 }

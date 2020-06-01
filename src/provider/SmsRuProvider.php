@@ -2,36 +2,42 @@
 
 namespace alexeevdv\sms\provider;
 
-use alexeevdv\Sms\Contract\Provider;
+use alexeevdv\Sms\Contract;
+use alexeevdv\sms\Psr\HttpClient;
+use alexeevdv\sms\Psr\RequestFactory;
+use alexeevdv\Sms\SmsRu\PhoneNumber;
+use alexeevdv\Sms\SmsRu\Provider;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
 use yii\di\Instance;
-use yii\helpers\ArrayHelper;
-use yii\httpclient\Client as HttpClient;
 
 /**
  * Class SmsRuProvider
  * @package alexeevdv\sms\provider
  */
-final class SmsRuProvider extends BaseObject implements Provider
+final class SmsRuProvider extends BaseObject implements Contract\Provider
 {
-    const STATUS_QUEUED = 100;
-
     /**
      * @var string
      */
-    public $api_id;
+    public $apiId;
 
     /**
-     * @var array
+     * @var ClientInterface|array|string
      */
-    public $httpClientConfig = [
-        'class' => HttpClient::class,
-        'baseUrl' => 'https://sms.ru/sms',
-        'responseConfig' => [
-            'format' => HttpClient::FORMAT_JSON
-        ],
-    ];
+    public $httpClient = HttpClient::class;
+
+    /**
+     * @var RequestFactoryInterface|array|string
+     */
+    public $requestFactory = RequestFactory::class;
+
+    /**
+     * @var SmsRuProvider
+     */
+    private $_provider;
 
     /**
      * @inheritdoc
@@ -39,53 +45,23 @@ final class SmsRuProvider extends BaseObject implements Provider
      */
     public function init()
     {
-        if ($this->api_id === null) {
-            throw new InvalidConfigException('`api_id` is required');
+        if ($this->apiId === null) {
+            throw new InvalidConfigException('`apiId` is required');
         }
+
+        $this->httpClient = Instance::ensure($this->httpClient, ClientInterface::class);
+        $this->requestFactory = Instance::ensure($this->requestFactory, RequestFactoryInterface::class);
+
+        $this->_provider = new Provider($this->apiId, $this->httpClient, $this->requestFactory);
+
         parent::init();
     }
 
     /**
      * @inheritdoc
      */
-    public function sendMessage($number, $text)
+    public function sendMessage(Contract\PhoneNumber $number, string $text): Contract\MessageId
     {
-        $responseData = $this->apiCall('send', [
-            'to' => $number,
-            'msg' => $text,
-        ]);
-
-
-        $statusCode = ArrayHelper::getValue($responseData, 'status_code');
-        if ($statusCode !== static::STATUS_QUEUED) {
-            throw new Exception('Sms is not sent');
-        }
-
-        $messageId = ArrayHelper::getValue($responseData, 'sms.' . $number . '.sms_id', null);
-        if ($messageId === null) {
-            throw new Exception('Message ID is null');
-        }
-
-        return new MessageId($messageId);
-    }
-
-    /**
-     * @param string $method
-     * @param array $params
-     * @return array
-     */
-    public function apiCall($method, array $params = [])
-    {
-        /** @var HttpClient $client */
-        $client = Instance::ensure($this->httpClientConfig, HttpClient::class);
-
-        // Require json response
-        $params = ArrayHelper::merge($params, [
-            'json' => 1,
-            'api_id' => $this->api_id,
-        ]);
-
-        $response = $client->get($method, $params)->send();
-        return $response->data;
+        return $this->_provider->sendMessage(new PhoneNumber((string) $number), $text);
     }
 }

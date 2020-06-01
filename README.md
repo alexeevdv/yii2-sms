@@ -46,7 +46,7 @@ use alexeevdv\sms\Sms;
            'class' => Sms::class,
            'provider' => [
                'class' => SmsRuProvider::class,
-               'api_id' => '123456789',
+               'apiId' => '123456789',
            ],
        ],
    ],
@@ -70,7 +70,7 @@ Supported providers:
 
   Class: \alexeevdv\sms\provider\SmsRuProvider
   Params:
-  * `api_id` - Your api ID from sms.ru
+  * `apiId` - Your api ID from sms.ru
 
 * [smsc.ru](http://smsc.ru/)
   

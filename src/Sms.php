@@ -4,6 +4,7 @@ namespace alexeevdv\sms;
 
 use alexeevdv\Sms\Contract\Exception;
 use alexeevdv\Sms\Contract\Provider;
+use alexeevdv\sms\provider\PhoneNumber;
 use yii\base\Component;
 use yii\base\ErrorHandler;
 use yii\base\InvalidConfigException;
@@ -46,15 +47,10 @@ final class Sms extends Component
         parent::init();
     }
 
-    /**
-     * @param string $number
-     * @param string $text
-     * @return bool
-     */
-    public function send($number, $text)
+    public function send(string $number, string $text): bool
     {
         try {
-            $this->_provider->sendMessage($number, $text);
+            $this->_provider->sendMessage(new PhoneNumber($number), $text);
             return true;
         } catch (Exception $e) {
             $this->errorHandler->logException($e);
