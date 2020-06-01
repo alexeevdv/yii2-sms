@@ -56,7 +56,7 @@ class SmscRuProvider extends BaseProvider
      */
     public function send($number, $text)
     {
-        $response = $this->apiCall('send', [
+        $response = $this->apiCall('send.php', [
             'phones' => $number,
             'mes' => $text,
         ]);
