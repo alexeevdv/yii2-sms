@@ -2,6 +2,7 @@
 
 namespace alexeevdv\sms\provider;
 
+use alexeevdv\Sms\Contract\Provider;
 use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
 use yii\di\Instance;
@@ -12,7 +13,7 @@ use yii\httpclient\Client as HttpClient;
  * Class SmscRuProvider
  * @package alexeevdv\sms\provider
  */
-final class SmscRuProvider extends BaseObject implements ProviderInterface
+final class SmscRuProvider extends BaseObject implements Provider
 {
     const FORMAT_JSON = 3;
 
@@ -53,15 +54,23 @@ final class SmscRuProvider extends BaseObject implements ProviderInterface
     }
 
     /**
+     * @throws Exception
+     *
      * @inheritdoc
      */
-    public function send($number, $text)
+    public function sendMessage($number, $text)
     {
         $response = $this->apiCall('send.php', [
             'phones' => $number,
             'mes' => $text,
         ]);
-        return ArrayHelper::getValue($response, 'id', null) !== null;
+
+        $messageId = ArrayHelper::getValue($response, 'id', null);
+        if ($messageId === null) {
+            throw new Exception('Message ID is null');
+        }
+
+        return new MessageId($messageId);
     }
 
     /**

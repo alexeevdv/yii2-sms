@@ -1,5 +1,6 @@
 Under development
 -------------------------
+- [Feature] Extract provider contract to separate package (alexeevdv)
 - [Feature] Use provider interface instead of base class (alexeevdv)
 
 1.0.1

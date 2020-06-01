@@ -2,8 +2,10 @@
 
 namespace alexeevdv\sms;
 
-use alexeevdv\sms\provider\ProviderInterface;
+use alexeevdv\Sms\Contract\Exception;
+use alexeevdv\Sms\Contract\Provider;
 use yii\base\Component;
+use yii\base\ErrorHandler;
 use yii\base\InvalidConfigException;
 use yii\di\Instance;
 
@@ -19,7 +21,12 @@ final class Sms extends Component
     public $provider;
 
     /**
-     * @var ProviderInterface
+     * @var ErrorHandler|array|string
+     */
+    public $errorHandler = 'errorHandler';
+
+    /**
+     * @var Provider
      */
     private $_provider;
 
@@ -33,7 +40,8 @@ final class Sms extends Component
             throw new InvalidConfigException('`provider` is required.');
         }
 
-        $this->_provider = Instance::ensure($this->provider, ProviderInterface::class);
+        $this->errorHandler = Instance::ensure($this->errorHandler, ErrorHandler::class);
+        $this->_provider = Instance::ensure($this->provider, Provider::class);
 
         parent::init();
     }
@@ -45,6 +53,12 @@ final class Sms extends Component
      */
     public function send($number, $text)
     {
-        return $this->_provider->send($number, $text);
+        try {
+            $this->_provider->sendMessage($number, $text);
+            return true;
+        } catch (Exception $e) {
+            $this->errorHandler->logException($e);
+            return false;
+        }
     }
 }

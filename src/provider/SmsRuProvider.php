@@ -2,6 +2,7 @@
 
 namespace alexeevdv\sms\provider;
 
+use alexeevdv\Sms\Contract\Provider;
 use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
 use yii\di\Instance;
@@ -12,7 +13,7 @@ use yii\httpclient\Client as HttpClient;
  * Class SmsRuProvider
  * @package alexeevdv\sms\provider
  */
-final class SmsRuProvider extends BaseObject implements ProviderInterface
+final class SmsRuProvider extends BaseObject implements Provider
 {
     const STATUS_QUEUED = 100;
 
@@ -47,13 +48,25 @@ final class SmsRuProvider extends BaseObject implements ProviderInterface
     /**
      * @inheritdoc
      */
-    public function send($number, $text)
+    public function sendMessage($number, $text)
     {
-        $response = $this->apiCall('send', [
+        $responseData = $this->apiCall('send', [
             'to' => $number,
             'msg' => $text,
         ]);
-        return ArrayHelper::getValue($response, 'status_code') === static::STATUS_QUEUED;
+
+
+        $statusCode = ArrayHelper::getValue($responseData, 'status_code');
+        if ($statusCode !== static::STATUS_QUEUED) {
+            throw new Exception('Sms is not sent');
+        }
+
+        $messageId = ArrayHelper::getValue($responseData, 'sms.' . $number . '.sms_id', null);
+        if ($messageId === null) {
+            throw new Exception('Message ID is null');
+        }
+
+        return new MessageId($messageId);
     }
 
     /**

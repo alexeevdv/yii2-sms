@@ -4,7 +4,8 @@
     "type": "yii2-extension",
     "require": {
         "yiisoft/yii2": "^2.0",
-        "yiisoft/yii2-httpclient": "^2.0"
+        "yiisoft/yii2-httpclient": "^2.0",
+        "alexeevdv/php-sms-contracts": "^0.0.1"
     },
     "require-dev": {
         "yiisoft/yii2-coding-standards": "^2.0",
